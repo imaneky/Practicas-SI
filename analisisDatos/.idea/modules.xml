@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/analisisDatos.iml" filepath="$PROJECT_DIR$/.idea/analisisDatos.iml" />
+    </modules>
+  </component>
+
+  <component name="libraryTable">
+    <library name="sqlite-jdbc-3.8.11.2">
+    <CLASSES>
+     <root url="jar://$APPLICATION_HOME_DIR$/lib/sqlite-jdbc-3.8.11.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+     <root url="jar://$APPLICATION_HOME_DIR$/lib/sqlite-jdbc-3.8.11.2.jar!/" />
+    </SOURCES>
+    </library>
+  </component>
+</project>
