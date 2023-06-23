@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:sqlite:C:\Users\kadir\Documentos\SI - Extraordinaria\Practica1_SI\analisisDatos\intrusion_detection.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="alerts_database" uuid="8678e9ed-4a61-40ad-bf32-01ffe1078b22">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/analisisDatos/alerts_database.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

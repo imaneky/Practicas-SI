@@ -72,8 +72,12 @@ plt.show()
 
 # Alternativa grafico circular
 
+plt.figure(figsize=(15,12))
 plt.bar(categorias, num_alertas)
+plt.xticks(rotation=45, ha="right", rotation_mode="anchor")
+plt.figure(figsize=(15,12))
 plt.title("Gráfico de clasificacion por categorias alternativo al grafico circular")
+
 plt.show()
 
 # DISPOSITIVOS MAS VULNERABLES (SUMA SERVICIOS VULNERABLES Y VULNERABILIDADES DETECTADAS)
