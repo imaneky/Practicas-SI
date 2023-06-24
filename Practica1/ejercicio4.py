@@ -70,6 +70,16 @@ plt.legend(wedges, legend_labels, loc='center left', bbox_to_anchor=(1, 0.5), ti
 plt.tight_layout() # Ajustar el espacio para evitar que los nombres se superpongan
 plt.show()
 
+# Alternativa grafico circular
+
+plt.figure(figsize=(15,12))
+plt.bar(categorias, num_alertas)
+plt.xticks(rotation=45, ha="right", rotation_mode="anchor")
+plt.figure(figsize=(15,12))
+plt.title("Gráfico de clasificacion por categorias alternativo al grafico circular")
+
+plt.show()
+
 # DISPOSITIVOS MAS VULNERABLES (SUMA SERVICIOS VULNERABLES Y VULNERABILIDADES DETECTADAS)
 
 dispositivos_vulnerables_df = pd.read_sql_query('SELECT id, SUM(analisisServiviosInseguros + analisisVulnerabilidades) as num_vulnerabilidades FROM devices GROUP BY id ORDER BY num_vulnerabilidades', conexion)
