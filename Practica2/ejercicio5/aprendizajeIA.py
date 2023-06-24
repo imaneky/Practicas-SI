@@ -66,10 +66,10 @@ def export_random_forest_trees(clf):
         export_decision_tree_graph(estimator, f'RandomForest_{i}')
 
 def main():
-    with open('C:/Users/Georgia/Desktop/sistemas informacion/Practicas-SI-main/Practica2/ejercicio5/devices_IA_clases.json') as file:
+    with open('devices_IA_clases.json') as file:
         data_devices_train = json.load(file)
 
-    with open('C:/Users/Georgia/Desktop/sistemas informacion/Practicas-SI-main/Practica2/ejercicio5/devices_IA_predecir_v2.json') as file:
+    with open('devices_IA_predecir_v2.json') as file:
         data_devices_test = json.load(file)
 
     data_x_train, data_y_train = preprocess_data(data_devices_train)
