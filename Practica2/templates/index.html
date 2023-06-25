@@ -47,6 +47,7 @@
 
     .table td {
         vertical-align: middle;
+        text-align: center;
     }
 
     .text-muted {
@@ -56,16 +57,7 @@
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
-    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 position-absolute bg-gradient-dark loopple-fixed-start" id="sidenav-main">
-        <div class="sidebar-add" data-toggle="modal" data-target="#sidebarModal">
-            <svg id="Layer_1" class="m-auto" width="20px" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 114 114">
-                <rect style="fill:#525f7f;" x="0.5" y="44.5" width="113" height="24" rx="9.94" ry="9.94"></rect>
-                <path style="fill:#525f7f;" d="M146.56,85A9.46,9.46,0,0,1,156,94.44v4.11a9.46,9.46,0,0,1-9.44,9.44H53.44A9.46,9.46,0,0,1,44,98.56V94.44A9.46,9.46,0,0,1,53.44,85h93.11m0-1H53.44A10.48,10.48,0,0,0,43,94.44v4.11A10.48,10.48,0,0,0,53.44,109h93.11A10.48,10.48,0,0,0,157,98.56V94.44A10.48,10.48,0,0,0,146.56,84Z" transform="translate(-43 -40)"></path>
-                <rect style="fill:#525f7f;" x="45.5" y="0.5" width="24" height="113" rx="9.94" ry="9.94"></rect>
-                <path style="fill:#525f7f;" d="M102.56,41A9.46,9.46,0,0,1,112,50.44v93.11a9.46,9.46,0,0,1-9.44,9.44H98.44A9.46,9.46,0,0,1,89,143.56V50.44A9.46,9.46,0,0,1,98.44,41h4.11m0-1H98.44A10.48,10.48,0,0,0,88,50.44v93.11A10.48,10.48,0,0,0,98.44,154h4.11A10.48,10.48,0,0,0,113,143.56V50.44A10.48,10.48,0,0,0,102.56,40Z" transform="translate(-43 -40)"></path>
-            </svg>
-        </div>
-    </aside>
+
     <div class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" id="panel">
         <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarTop">
             <div class="container-fluid py-1 px-3">
@@ -79,104 +71,11 @@
                 <!-- End Navbar -->
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                        <div class="input-group input-group-outline">
-                            <label class="form-label">Type here...</label>
-                            <input type="text" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
-                        </div>
+
                     </div>
                     <ul class="navbar-nav  justify-content-end">
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link font-weight-bold px-0 text-body">
-                                <i class="fa fa-user me-sm-1" aria-hidden="true"></i>
-                                <span class="d-sm-inline d-none">Sign In</span>
-                            </a>
-                        </li>
-                        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link p-0 text-body" id="iconNavbarSidenav">
-                                <div class="sidenav-toggler-inner">
-                                    <i class="sidenav-toggler-line"></i>
-                                    <i class="sidenav-toggler-line"></i>
-                                    <i class="sidenav-toggler-line"></i>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item px-3 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link p-0 text-body">
-                                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown pe-2 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link p-0 text-body" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-bell cursor-pointer" aria-hidden="true"></i>
-                            </a>
-                            <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                                <li class="mb-2">
-                                    <a class="dropdown-item border-radius-md" href="javascript:;">
-                                        <div class="d-flex py-1">
-                                            <div class="my-auto">
-                                                <img src="../static/assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="text-sm font-weight-normal mb-1">
-                                                    <span class="font-weight-bold">New message</span> from Laur
-                                                </h6>
-                                                <p class="text-xs text-secondary mb-0">
-                                                    <i class="fa fa-clock me-1" aria-hidden="true"></i>
-                                                    13 minutes ago
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="mb-2">
-                                    <a class="dropdown-item border-radius-md" href="javascript:;">
-                                        <div class="d-flex py-1">
-                                            <div class="my-auto">
-                                                <img src="../static/assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="text-sm font-weight-normal mb-1">
-                                                    <span class="font-weight-bold">New album</span> by Travis Scott
-                                                </h6>
-                                                <p class="text-xs text-secondary mb-0">
-                                                    <i class="fa fa-clock me-1" aria-hidden="true"></i>
-                                                    1 day
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item border-radius-md" href="javascript:;">
-                                        <div class="d-flex py-1">
-                                            <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-                                                <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                    <title>credit-card</title>
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                                                            <g transform="translate(1716.000000, 291.000000)">
-                                                                <g transform="translate(453.000000, 454.000000)">
-                                                                    <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
-                                                                    <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-                                                                </g>
-                                                            </g>
-                                                        </g>
-                                                    </g>
-                                                </svg>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="text-sm font-weight-normal mb-1">
-                                                    Payment successfully completed
-                                                </h6>
-                                                <p class="text-xs text-secondary mb-0">
-                                                    <i class="fa fa-clock me-1" aria-hidden="true"></i>
-                                                    2 days
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
+                        <li class="nav-item">
+                            <a href="https://github.com/imaneky/Practicas-SI" class="nav-link text-muted" target="_blank">Our GitHub :)</a>
                         </li>
                     </ul>
                 </div>
@@ -189,10 +88,10 @@
                     <table class="table align-items-center ">
                         <tbody>
                           <tr>
-                            <td class="w-10">
+                            <td class="w-20">
                               <button type="button" class="btn btn-secondary col-md-12" id="btn-3" onclick="updateIPNumber(3)">Top 3</button>
                             </td>
-                            <td class="w-30">
+                            <td class="w-20">
                               <button type="button" class="btn btn-secondary col-md-12" id="btn-10" onclick="updateIPNumber(10)">Top 10</button>
                             </td>
                           </tr>
@@ -220,11 +119,11 @@
                     <table class="table align-items-center ">
                         <tbody>
                           <tr>
-                            <td class="w-10">
+                            <td class="w-20">
                               <button type="button" class="btn btn-secondary col-md-12" id="btn-03" onclick="updateDeviceNumber(3)">Top 3</button>
                             </td>
-                            <td class="w-30">
-                              <button type="button" class="btn btn-secondary col-md-12" id="btn-010" onclick="updateDeviceNumber(10)">Top 10</button>
+                            <td class="w-20">
+                              <button type="button" class="btn btn-secondary col-md-12" id="btn-010" onclick="updateDeviceNumber(5)">Top 5</button>
                             </td>
                           </tr>
                         </tbody>
@@ -243,21 +142,69 @@
                             document.getElementById('numDevice').innerHTML = numDevice;
                             });
                     }
-
-
                 </script>
                 </div>
             </div>
+
             <div class="row removable">
-                <div class="col-lg-4">
+                <div class="col-lg-12">
                    <h6 class="text-capitalize col-md-12">Top <span id="numPeligrosos">{{numPeligrosos}}</span> dispositivos más peligrosos</h6>
-                <div id="chartDangerous" class="chart"></div>
+                    <table class="table align-items-center ">
+                        <tbody>
+                          <tr>
+                            <td class="w-15">
+                              <button type="button" class="btn btn-secondary col-md-12" id="btn-dangerous" onclick="chooseChart('chartDangerous')">Dispositivos Peligrosos</button>
+                            </td>
+                            <td class="w-15">
+                              <button type="button" class="btn btn-secondary col-md-12" id="btn-secure" onclick="chooseChart('chartSecure')">Dispositivos Seguros</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <div id="chartDangerous" class="chart"></div>
+                    <div id="chartSecure" class="chart"></div>
+
                 <script>
                     var chartDangerousDevices = {{chartDangerousJSON | safe}};
-                    Plotly.newPlot('chartDangerous', chartDangerousDevices, {}, {displayModeBar:false})
+                    var chartSecureDevices = {{chartSecureJSON | safe}};
+                    var chartDangerous;
+                    var chartSecure;
+
+                    function createChartDangerous() {
+                        chartDangerous = Plotly.newPlot('chartDangerous', chartDangerousDevices, {}, {displayModeBar:false});
+                    }
+
+                    function createChartSecure() {
+                        chartSecure = Plotly.newPlot('chartSecure', chartSecureDevices, {}, {displayModeBar:false});
+                        chartSecure.then(function () {
+                            chartSecure.restyle({visible: false}); // Ocultar el gráfico de dispositivos seguros inicialmente
+                        });
+                    }
+
+
+                    function chooseChart(chartId) {
+                        if (chartId === 'chartDangerous') {
+                            createChartDangerous()
+                            chartDangerous.then(function () {
+                                chartDangerous.restyle({visible: true});
+                                chartSecure.restyle({visible: false});
+                                chartSecure.style.display = 'block';
+                            });
+                        } else if (chartId === 'chartSecure') {
+                            createChartSecure()
+                            chartSecure.then(function () {
+                                chartSecure.restyle({visible: true});
+                                chartDangerous.restyle({visible: false});
+                                chartDangerous.style.display = 'block';
+                            });
+                        }
+                    }
+
                 </script>
+
                 </div>
-                <div class="col-lg-8">
+
+                <div class="col-lg-12">
                     <h6 class="text-capitalize col-md-12">Últimas 10 vulnerabilidades - CVE Search</h6>
                     <p class="text-muted">Última actualización: {{ last_updated_cve }}</p>
                     <p class="text-muted">{{ counter }}</p>
@@ -265,12 +212,12 @@
                     <div class="table-responsive">
                         <table class="table">
 
-                            <tbody>
+                            <tbody class="text-center">
                               {% for vulnerability in vulnerabilities_table %}
                               <tr>
-                                <td>{{ vulnerability['CVE ID'] }}</td>
-                                <td>{{ vulnerability['Fecha de publicación'] }}</td>
-                                <td>{{ vulnerability['Resumen'] }}</td>
+                                <td class="text-center">{{ vulnerability['CVE ID'] }}</td>
+                                <td class="text-center">{{ vulnerability['Fecha de publicación'] }}</td>
+                                <td class="text-center">{{ vulnerability['Resumen'] }}</td>
                               </tr>
                               {% endfor %}
                             </tbody>
@@ -298,64 +245,43 @@
             </div>
             <div class="row removable">
                 <div class="col-lg-4">
-                <div id="temporal-evolution">
-                    <canvas id="chartTemporalEvolution"></canvas>
+                <div id="brechasSeguridad">
+
                 </div>
-
                 <script>
-                    function loadChartTemporalEvolution() {
-                        fetch('/chartTemporalEvolution')
+                    function obtenerBrechasDeSeguridad() {
+                        fetch('/securityBreaches')
                             .then(response => response.json())
-                            .then(chartJSON => {
-                                var chartData = JSON.parse(chartJSON)
-                                var ctx = document.getElementById('chartTemporalEvolution').getContext('2d')
-                                new Chart(ctx, {
-                                    type: 'line',
-                                    data: chartData,
-                                    options: {
-                                        responsive: true, // Hace que el gráfico se adapte al tamaño del contenedor
-                                        scales: {
-                                            x: {
-                                                type: 'time', // Utiliza escalas de tiempo en el eje x
-                                                time: {
-                                                    unit: 'day', // Muestra los datos en unidades diarias
-                                                    displayFormats: {
-                                                        day: 'MMM D' // Formato de visualización de las fechas (ejemplo: "Feb 15")
-                                                    }
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: 'Fecha' // Título del eje x
-                                                }
-                                            },
-                                            y: {
-                                                title: {
-                                                    display: true,
-                                                    text: 'Cantidad de Alertas' // Título del eje y
-                                                }
-                                            }
-                                        },
-                                        plugins: {
-                                            legend: {
-                                                display: true, // Muestra la leyenda del gráfico
-                                                position: 'top', // Posición de la leyenda (ejemplo: 'top', 'bottom', 'right', 'left')
-                                            },
-                                            title: {
-                                                display: true,
-                                                text: 'Evolución Temporal de Alertas' // Título del gráfico
-                                            }
-                                        }
-                                    }
-                                });
+                            .then(brechas => {
+                                // Actualizar el contenido del div con las brechas de seguridad
+                                const divBrechasSeguridad = document.getElementById('brechasSeguridad');
+                                divBrechasSeguridad.innerHTML = ''; // Limpiar contenido anterior
 
-                        });
+                                // Recorrer las brechas y agregarlas al div
+                                brechas.forEach(brecha => {
+                                    const p = document.createElement('p');
+                                    p.textContent = `Brecha: ${brecha.nombre}, Fecha: ${brecha.fecha}`;
+
+                                    divBrechasSeguridad.appendChild(p);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error al obtener las brechas de seguridad:', error);
+                            });
                     }
-                    loadChartTemporalEvolution()
+                    obtenerBrechasDeSeguridad();
                 </script>
+
+
                 </div>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4"></div>
             </div>
+            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                <li class="nav-item">
+                  <a href="https://github.com/imaneky/Practicas-SI" class="nav-link text-muted" target="_blank">Our GitHub :)</a>
+                </li>
+            </ul>
         </div>
         <footer class="footer pt-3 pb-4">
             <div class="container-fluid">
