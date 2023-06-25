@@ -14,6 +14,45 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link rel="stylesheet" href="../static/assets/css/theme.css">
     <link rel="stylesheet" href="../static/assets/css/loopple/loopple.css">
+
+    <style>
+    /* Estilos para el contador y la tabla de vulnerabilidades */
+    #counter {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FF7F50; /* Color rosa coral */
+        margin-bottom: 10px;
+    }
+
+    #vulnerabilities-table {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 20px;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+    }
+
+    .table th {
+        text-align: left;
+        font-weight: bold;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .text-muted {
+        color: #777;
+    }
+    </style>
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -170,13 +209,57 @@
             </div>
             <div class="row removable">
                 <div class="col-lg-4">
-                    <h6 class="text-capitalize col-md-12">Últimas 10 vulnerabilidades - CVE Search</h6>
-                    <p>Última actualización: <span id="last-updated">{{last_updated_cve}}</span></p>
-                    
+                   <h6 class="text-capitalize col-md-12">Top <span id="numPeligrosos">{{numPeligrosos}}</span> dispositivos más peligrosos</h6>
+                <div id="chartDangerous" class="chart"></div>
+                <script>
+                    var chartDangerousDevices = {{chartDangerousJSON | safe}};
+                    Plotly.newPlot('chartDangerous', chartDangerousDevices, {}, {displayModeBar:false})
+                </script>
                 </div>
                 <div class="col-lg-8">
+                    <h6 class="text-capitalize col-md-12">Últimas 10 vulnerabilidades - CVE Search</h6>
+                    <p class="text-muted"><span id="counter-value">{{ counter }}</span> segundos</p>
 
+                    <div id="vulnerabilities-table"></div>
+                    <div class="table-responsive">
+                        <table class="table">
 
+                            <tbody>
+                              {% for vulnerability in vulnerabilities_table %}
+                              <tr>
+                                <td>{{ vulnerability['CVE ID'] }}</td>
+                                <td>{{ vulnerability['Fecha de publicación'] }}</td>
+                                <td>{{ vulnerability['Resumen'] }}</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                        </table>
+                        <p class="text-muted">Última actualización: {{ last_updated_cve }}</p>
+                        <p class="text-muted">{{ counter }}</p>
+
+                    </div>
+                    <script>
+                        function updateCounter() {
+                        fetch('/get_counter')
+                            .then(response => response.text())
+                            .then(counter => {document.getElementById('counter').textContent = counter;
+                            });
+                        }
+
+                        // Función para actualizar la tabla de vulnerabilidades
+                        function updateVulnerabilitiesTable() {
+                        fetch('/get_vulnerabilities_table')
+                          .then((response) => response.text())
+                          .then((html) => {
+                            document.getElementById('vulnerabilities-table').innerHTML = html;
+                          });
+                        }
+
+                        // Llamar a la función de actualización inicial
+                        updateVulnerabilitiesTable();
+                        updateCounter()
+                        setInterval(updateVulnerabilitiesTable, 1000);
+                    </script>
                 </div>
             </div>
             <div class="row removable">
