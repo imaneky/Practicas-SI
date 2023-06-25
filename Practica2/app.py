@@ -147,6 +147,126 @@ def vulnerabilidades_cve():
         last_updated_cve = datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
 
 
+# -------------- EJERCICIO 4 --------------
+#  Distribución de las clasificaciones de alertas más comunes
+@app.route('/chartClassification/<int:num>')
+def chartClassification(num):
+    clasification_df = alerts_df.groupby('clasificacion')['sid'].count().reset_index(name='cantidad')
+    clasification_df.sort_values(by=['cantidad'], ascending=False, inplace=True)
+
+    fig = px.bar(clasification_df.head(num), x='clasificacion', y='cantidad',
+                 labels=dict(clasificacion="Clasificación", cantidad="Cantidad"))
+
+    chartJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return chartJSON
+
+
+#
+@app.route('/chartTemporalEvolution')
+def chartTemporalEvolution():
+    alertas_por_fecha = alerts_df.groupby('timestamp').size().reset_index(name='cantidad')
+    alertas_por_fecha['timestamp'] = pd.to_datetime(alertas_por_fecha['timestamp'])
+
+    fig = px.line(alertas_por_fecha, x='timestamp', y='cantidad',
+                  labels=dict(timestamp="Fecha", cantidad="Cantidad de Alertas"))
+
+    chartJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return chartJSON
+
+
+@app.route('/mapaDispositivos')
+def mapaDispositivos():
+    dispositivos_df = devices_df.copy()
+
+    # Eliminar las filas que no tienen información de ubicación
+    dispositivos_df = dispositivos_df[dispositivos_df['localizacion'] != 'None']
+
+    # Obtener las coordenadas geográficas (latitud, longitud) de cada ubicación
+    geolocator = Nominatim(user_agent="my_app")
+    dispositivos_df['geolocation'] = dispositivos_df['localizacion'].apply(lambda x: geolocator.geocode(x))
+    dispositivos_df['latitude'] = dispositivos_df['geolocation'].apply(lambda x: x.latitude if x else None)
+    dispositivos_df['longitude'] = dispositivos_df['geolocation'].apply(lambda x: x.longitude if x else None)
+
+    # Crear el mapa interactivo utilizando la biblioteca folium
+    mapa = folium.Map(location=[dispositivos_df['latitude'].mean(), dispositivos_df['longitude'].mean()], zoom_start=4)
+
+    # Agregar un marcador por cada dispositivo con información de ubicación
+    for i, row in dispositivos_df.iterrows():
+        if row['latitude'] and row['longitude']:
+            folium.Marker([row['latitude'], row['longitude']], popup=row['localizacion']).add_to(mapa)
+
+    # Guardar el mapa como un archivo HTML
+    mapa_html = mapa.get_root().render()
+
+    return mapa_html
+
+
+def obtener_top_clasificaciones():
+    alertas_categoria_df = alerts_df.groupby('clasificacion')['clasificacion'].count().reset_index(name='numero_alertas')
+    alertas_categoria_df = alertas_categoria_df.sort_values(by='numero_alertas', ascending=False).head(3)
+
+    return alertas_categoria_df
+
+
+def obtener_informacion_wikipedia(clasificacion):
+    url = f'https://es.wikipedia.org/w/api.php?action=opensearch&search={clasificacion}&limit=1&format=json'
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            info = response.json()
+            if len(info) > 2:
+                return info[2][0]
+            else:
+                return ""
+        else:
+            return ""
+    except requests.RequestException:
+        return ""
+
+
+def buscar_tweets(clasificacion):
+    url = f'https://api.twitter.com/1.1/search/tweets.json?q={clasificacion}'
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            tweets = [tweet['text'] for tweet in response.json()['statuses']]
+            return tweets
+        else:
+            return []
+    except requests.RequestException:
+        return []
+
+
+@app.route('/chart_top_alertas')
+def chart_top_alertas():
+    top_clasificaciones = obtener_top_clasificaciones()
+    clasificaciones = top_clasificaciones['clasificacion']
+    porcentajes = top_clasificaciones['numero_alertas'] / top_clasificaciones['numero_alertas'].sum() * 100
+
+    # Configurar el gráfico
+    fig, ax = plt.subplots(figsize=(8, 8))
+    wedges, _, autotexts = ax.pie(porcentajes, labels=clasificaciones, startangle=90,
+                                  autopct='%1.1f%%', textprops={'fontsize': 'small'})
+    ax.axis('equal')
+    plt.title('Top 3 de Alertas')
+
+    # Añadir porcentajes en el gráfico
+    for autotext in autotexts:
+        autotext.set_color('white')
+
+    # Obtener información de Wikipedia y tweets para cada clasificación
+    info_wikipedia = [obtener_informacion_wikipedia(clasificacion) for clasificacion in clasificaciones]
+    tweets = [buscar_tweets(clasificacion) for clasificacion in clasificaciones]
+
+    return jsonify({
+        'grafico': plt,
+        'info_wikipedia': info_wikipedia,
+        'tweets': tweets
+    })
+
+
 if __name__ == '__main__':
 
     vulnerabilidades_cve()
