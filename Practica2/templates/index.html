@@ -186,7 +186,6 @@
             <div class="row removable">
                 <div class="col-lg-6">
                     <h6 class="text-capitalize col-md-12">Top <span id="numIP">{{numIP}}</span> IPs más problemáticas</h6>
-
                     <table class="table align-items-center ">
                         <tbody>
                           <tr>
@@ -201,7 +200,6 @@
                     </table>
                     <div id="chartIP" class="chart">
                 </div>
-
                 <script>
                     var chartDataIP = {{ chartIPJSON | safe }};
                     Plotly.newPlot('chartIP', chartDataIP, {}, {displayModeBar: false});
@@ -214,17 +212,38 @@
                             document.getElementById('numIP').innerHTML = numIP;
                             });
                     }
-
                 </script>
                 </div>
+
                 <div class="col-lg-6">
                     <h6 class="text-capitalize col-md-12">Top <span id="numDevice">{{numDevice}}</span> dispositivos más vulnerables</h6>
-                <div id="chartDevices" class="chart">
-
+                    <table class="table align-items-center ">
+                        <tbody>
+                          <tr>
+                            <td class="w-10">
+                              <button type="button" class="btn btn-secondary col-md-12" id="btn-03" onclick="updateDeviceNumber(3)">Top 3</button>
+                            </td>
+                            <td class="w-30">
+                              <button type="button" class="btn btn-secondary col-md-12" id="btn-010" onclick="updateDeviceNumber(10)">Top 10</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <div id="chartDevices" class="chart">
                 </div>
                 <script>
                     var chartDataDevices = {{ chartDevicesJSON | safe }};
                     Plotly.newPlot('chartDevices', chartDataDevices, {}, {displayModeBar: false});
+
+                    function updateDeviceNumber(numDevice) {
+                        var url = '/chartDevices/' + numDevice
+                        Plotly.d3.json(url, function(error, data) {
+                            if (error) console.log(error);
+                            Plotly.react('chartDevices', data, {}, {displayModeBar:false});
+                            document.getElementById('numDevice').innerHTML = numDevice;
+                            });
+                    }
+
 
                 </script>
                 </div>
