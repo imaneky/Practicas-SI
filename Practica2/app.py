@@ -34,6 +34,8 @@ numDevice = 5
 numPeligrosos = 3
 numSeguros = 3
 
+def colorPalette():
+    return ['#FF7F50'] * 50
 
 @app.route('/')
 def index():
@@ -43,13 +45,18 @@ def index():
     chartDangerousJSON = chart_dangerous(numPeligrosos)
     chartSecureJSON = chart_secure(numSeguros)
     chartTotalSecurityJSON = chart_total_security()
+    vulnerabilities_table, counter = update_vulnerabilities_table()
+    counter_response = requests.get("http://localhost/get_counter")
+    counter_data = counter_response.json()
+    counter = counter_data['counter']
 
     return render_template('index.html', chartIPJSON=chartIPJSON, numIP=numIP,
                            chartDevicesJSON=chartDevicesJSON, numDevice=numDevice,
                            chartDangerousJSON=chartDangerousJSON, numPeligrosos=numPeligrosos,
                            chartSecureJSON=chartSecureJSON, numSeguros=numSeguros,
                            chartTotalSecurityJSON=chartTotalSecurityJSON,
-                           vulnerabilidades=vulnerabilidades, last_updated_cve=last_updated_cve)
+                           vulnerabilities_table=vulnerabilities_table, last_updated_cve=last_updated_cve,
+                           counter=counter)
 
 
 @app.route('/chart_IP/<int:num>')
@@ -61,7 +68,7 @@ def chart_IP(num):
     #ip_mas_problematicas_counts = ip_mas_problematicas_df['origen'].value_counts().head(numIP)
     ip_mas_problematicas_df.sort_values(by=['numero_alertas'], ascending=False, inplace=True)
 
-    fig = px.bar(ip_mas_problematicas_df.head(numIP), x='origen', y='numero_alertas', barmode='group',labels=dict(origen="IP", numero_alertas="Número de alertas"))
+    fig = px.bar(ip_mas_problematicas_df.head(numIP), x='origen', y='numero_alertas', barmode='group',labels=dict(origen="IP", numero_alertas="Número de alertas"), color_discrete_sequence=colorPalette())
     #fig = px.bar(x=ip_mas_problematicas_df.index, y=ip_mas_problematicas_counts.values, labels={'x': 'IP', 'y': 'Nº de alertas'})
 
     chartJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
@@ -75,7 +82,7 @@ def chart_devices(num):
     numDevice = num
     dispositivos_vulnerables_df = devices_df.groupby('id')['numero_vulnerabilidades'].sum().reset_index(name='numero_vulnerabilidades')
     dispositivos_vulnerables_df.sort_values(by=['numero_vulnerabilidades'], ascending=False, inplace=True)
-    fig = px.bar(dispositivos_vulnerables_df.head(numDevice), x='id', y='numero_vulnerabilidades', barmode='group',labels=dict(id="Dispositivo", numero_vulnerabilidades="Número de vulnerabilidades"))
+    fig = px.bar(dispositivos_vulnerables_df.head(numDevice), x='id', y='numero_vulnerabilidades', barmode='group',labels=dict(id="Dispositivo", numero_vulnerabilidades="Número de vulnerabilidades"), color_discrete_sequence=colorPalette())
 
     chartJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return chartJSON
@@ -118,12 +125,12 @@ def chart_total_security():
     data = {'Estado': ['Seguros', 'Peligrosos'], 'Cantidad': [num_seguros, num_peligrosos]}
     df = pd.DataFrame(data)
 
-    fig = px.pie(df, values='Cantidad', names='Estado', title='Dispositivos Seguros vs. Peligrosos')
+    fig = px.pie(df, values='Cantidad', names='Estado', title='Dispositivos Seguros vs. Peligrosos', color_discrete_sequence=colorPalette())
 
     chartJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return chartJSON
 
-
+"""
 def vulnerabilidades_cve():
     global vulnerabilidades
     global last_updated_cve
@@ -145,10 +152,61 @@ def vulnerabilidades_cve():
             vulnerabilidades.append(vulnerability)
 
         last_updated_cve = datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+"""
+def update_vulnerabilities_table():
+    global vulnerabilities
+    url = "https://cve.circl.lu/api/last/10"
+    response = requests.get(url)
+    vulnerabilities = response.json()
 
+    # Crear una lista de diccionarios con los datos de las vulnerabilidades
+    vulnerabilities_data = []
+    for vulnerability in vulnerabilities:
+        cve_id = vulnerability["id"]
+        published_date = vulnerability["Published"]
+        summary = vulnerability["summary"]
+        vulnerabilities_data.append({"CVE ID": cve_id, "Fecha de publicación": published_date, "Resumen": summary})
+
+    # Crear un DataFrame a partir de los datos de las vulnerabilidades
+    vulnerabilities_df = pd.DataFrame(vulnerabilities_data)
+
+    # Obtener la última vez que se actualizó la tabla de vulnerabilidades
+    last_updated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Limitar la tabla a las últimas 10 vulnerabilidades
+    vulnerabilities_table = vulnerabilities_df.head(10).to_html(index=False)
+
+    # Calcular el tiempo restante para el próximo refresh
+    next_refresh = datetime.datetime.now() + datetime.timedelta(minutes=3)
+    time_remaining = next_refresh - datetime.datetime.now()
+
+    # Imprimir el contador pequeño arriba del tiempo restante
+    counter = f"Actualización en: {time_remaining.seconds} segundos"
+
+    # Actualizar las variables globales
+    vulnerabilities = vulnerabilities_data
+    global last_updated_cve
+    last_updated_cve = last_updated
+
+    return vulnerabilities_table, counter
+
+
+
+# Programar la actualización de la tabla de vulnerabilidades cada 3 minutos
+scheduler = BackgroundScheduler()
+scheduler.add_job(update_vulnerabilities_table, 'interval', minutes=3)
+scheduler.start()
+@app.route('/get_counter')
+def get_counter():
+    vulnerabilities_table, counter = update_vulnerabilities_table()
+    return jsonify(counter=counter)
+@app.route('/get_vulnerabilities_table')
+def get_vulnerabilities_table():
+    vulnerabilities_table = update_vulnerabilities_table()
+    return vulnerabilities_table
 
 if __name__ == '__main__':
 
-    vulnerabilidades_cve()
+    update_vulnerabilities_table()
     app.run(port=80, debug=True)
 
