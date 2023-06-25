@@ -148,7 +148,7 @@
 
             <div class="row removable">
                 <div class="col-lg-12">
-                   <h6 class="text-capitalize col-md-12">Top <span id="numPeligrosos">{{numPeligrosos}}</span> dispositivos más peligrosos</h6>
+                   <h6 class="text-capitalize col-md-12">Seguridad de los dispositivos</h6>
                     <table class="table align-items-center ">
                         <tbody>
                           <tr>
@@ -171,14 +171,25 @@
                     var chartSecure;
 
                     function createChartDangerous() {
-                        chartDangerous = Plotly.newPlot('chartDangerous', chartDangerousDevices, {}, {displayModeBar:false});
+                        var layout = {
+                            title: 'Top 3 dispositivos más peligrosos',
+
+                        };
+
+                        chartDangerous = Plotly.newPlot('chartDangerous', chartDangerousDevices, {displayModeBar:false});
+                        Plotly.update('chartDangerous', {}, layout)
                     }
 
                     function createChartSecure() {
-                        chartSecure = Plotly.newPlot('chartSecure', chartSecureDevices, {}, {displayModeBar:false});
+                        var layout = {
+                            title: 'Top 3 dispositivos más seguros',
+
+                        };
+                        chartSecure = Plotly.newPlot('chartSecure', chartSecureDevices,  {displayModeBar:false});
                         chartSecure.then(function () {
-                            chartSecure.restyle({visible: false}); // Ocultar el gráfico de dispositivos seguros inicialmente
+                            chartSecure.restyle({visible: false});
                         });
+                        Plotly.update('chartSecure', {}, layout)
                     }
 
 
@@ -215,9 +226,9 @@
                             <tbody class="text-center">
                               {% for vulnerability in vulnerabilities_table %}
                               <tr>
-                                <td class="text-center">{{ vulnerability['CVE ID'] }}</td>
-                                <td class="text-center">{{ vulnerability['Fecha de publicación'] }}</td>
-                                <td class="text-center">{{ vulnerability['Resumen'] }}</td>
+                                <td class="text-left">{{ vulnerability['CVE ID'] }}</td>
+                                <td class="text-left">{{ vulnerability['Fecha de publicación'] }}</td>
+                                <td class="text-left">{{ vulnerability['Resumen'] }}</td>
                               </tr>
                               {% endfor %}
                             </tbody>
