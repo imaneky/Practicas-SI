@@ -15,6 +15,10 @@ from flask_weasyprint import HTML, render_pdf
 import kaleido
 import uuid
 import os
+from geopy.geocoders import Nominatim
+from matplotlib import pyplot as plt
+import folium
+import chart
 
 
 
@@ -23,10 +27,9 @@ app = Flask(__name__)
 con = sqlite3.connect('../Practica1/alerts_database.db')
 cur = con.cursor()
 alerts_df = pd.read_sql_query("SELECT * from alerts", con)
-devices_df = pd.read_sql_query(
-    "SELECT id, SUM(analisisServiviosInseguros + analisisVulnerabilidades) as numero_vulnerabilidades FROM DEVICES GROUP BY id ORDER BY numero_vulnerabilidades ",
-    con)
+devices_df = pd.read_sql_query("SELECT id, SUM(analisisServiviosInseguros + analisisVulnerabilidades) as numero_vulnerabilidades FROM devices GROUP BY id ORDER BY numero_vulnerabilidades ", con)
 df_devices = pd.read_sql_query("SELECT * from devices", con)
+
 vulnerabilidades = []
 last_updated_cve = ""
 numIP = 10
@@ -49,6 +52,8 @@ def index():
     counter_response = requests.get("http://localhost/get_counter")
     counter_data = counter_response.json()
     counter = counter_data['counter']
+    chartEvolutionJSON = chartTemporalEvolution()
+
 
     return render_template('index.html', chartIPJSON=chartIPJSON, numIP=numIP,
                            chartDevicesJSON=chartDevicesJSON, numDevice=numDevice,
@@ -56,7 +61,7 @@ def index():
                            chartSecureJSON=chartSecureJSON, numSeguros=numSeguros,
                            chartTotalSecurityJSON=chartTotalSecurityJSON,
                            vulnerabilities_table=vulnerabilities_table, last_updated_cve=last_updated_cve,
-                           counter=counter)
+                           counter=counter, chartEvolutionJSON=chartEvolutionJSON)
 
 
 @app.route('/chart_IP/<int:num>')
@@ -130,29 +135,7 @@ def chart_total_security():
     chartJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return chartJSON
 
-"""
-def vulnerabilidades_cve():
-    global vulnerabilidades
-    global last_updated_cve
 
-    response = requests.get("https://cve.circl.lu/api/last")
-
-    if response.status_code == 200:
-        data = response.json()
-        data_sorted = sorted(data, key=lambda x: x['Published'], reverse=True)
-        last_10_data = data_sorted[:10]
-        vulnerabilidades = []
-
-        for i in range(10):
-            vulnerability = {"id": last_10_data[i]["id"], "summary": last_10_data[i]["summary"]}
-
-            fecha_publicacion = datetime.datetime.fromisoformat(last_10_data[i]["Published"])
-            vulnerability["fecha_publicacion"] = fecha_publicacion.strftime('%d-%m-%Y %H:%M')
-            vulnerability["url"] = f"https://cve.circl.lu/cve/{last_10_data[i]['id']}"
-            vulnerabilidades.append(vulnerability)
-
-        last_updated_cve = datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
-"""
 def update_vulnerabilities_table():
     global vulnerabilities
     url = "https://cve.circl.lu/api/last/10"
@@ -181,7 +164,7 @@ def update_vulnerabilities_table():
     time_remaining = next_refresh - datetime.datetime.now()
 
     # Imprimir el contador pequeño arriba del tiempo restante
-    counter = f"Actualización en: {time_remaining.seconds} segundos"
+    counter = f"Actualizacion en: {time_remaining.seconds} segundos"
 
     # Actualizar las variables globales
     vulnerabilities = vulnerabilities_data
@@ -222,8 +205,9 @@ def chartClassification(num):
 #
 @app.route('/chartTemporalEvolution')
 def chartTemporalEvolution():
+
     alertas_por_fecha = alerts_df.groupby('timestamp').size().reset_index(name='cantidad')
-    alertas_por_fecha['timestamp'] = pd.to_datetime(alertas_por_fecha['timestamp'])
+
 
     fig = px.line(alertas_por_fecha, x='timestamp', y='cantidad',
                   labels=dict(timestamp="Fecha", cantidad="Cantidad de Alertas"))
